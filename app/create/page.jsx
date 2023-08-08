@@ -194,9 +194,9 @@ const Create = () => {
         const res = await fetch("/api/posts");
         const data = await res.json();
         updateProjects(data);
+        router.push("/");
       };
       fetchProjects();
-      router.push("/");
     }
   };
   if (!session?.user) {
