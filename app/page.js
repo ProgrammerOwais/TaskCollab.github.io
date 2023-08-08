@@ -1,4 +1,7 @@
 import Link from "next/link";
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
 export default function Home() {
   return (
     <main className="mt-10 min-h-[400px] w-[95%] md:w-8/12 mx-auto md:mt-24 flex flex-col gap-5 md:gap-10">
