@@ -7,7 +7,7 @@ export const connectToDB = async () => {
     return;
   }
   try {
-    await connect(process.env.MONGODB_URI, {
+    await connect(process.env.MONGODB_URL, {
       dbName: "task_collab",
       useNewUrlParser: true,
       useUnifiedTopology: true,

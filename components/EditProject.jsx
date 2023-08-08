@@ -25,7 +25,7 @@ const EditProject = ({ project, projects, setProjects }) => {
       {" "}
       <Link
         className="flex justify-center items-center"
-        href={`http://localhost:3000/editProject?id=${project._id}`}
+        href={`${process.env.NEXT_PUBLIC_URL}/editProject?id=${project._id}`}
       >
         {" "}
         <button
