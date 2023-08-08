@@ -1,27 +1,235 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+body {
+  background-color: #efefe1;
+  background-color: #efefe5e6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* hamburdger  */
+
+.btn {
+  width: 45px;
+  background: transparent;
+  border: none;
+  height: 35px;
+  padding: 0px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.effect1 span {
+  display: inline-block;
+  width: 80%;
+  height: 3px;
+  background: #000;
+  position: relative;
+  transition: all 0.2s;
+}
+.dark .effect1 span {
+  background-color: white;
+}
+
+.effect1 span:before,
+.effect1 span:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  background: #000;
+  height: 3px;
+  left: 0px;
+  transition: all 0.3s;
+}
+.dark .effect1 span:before,
+.dark .effect1 span:after {
+  background-color: white;
+}
+
+.effect1 span:before {
+  top: 10px;
+}
+
+.effect1 span:after {
+  bottom: 10px;
+}
+
+.btn.effect1:hover span:after {
+  left: -5px;
+}
+
+.btn.effect1:hover span:before {
+  left: 5px;
+}
+
+.btn.effect1 span.active {
+  background: transparent;
+}
+
+.btn.effect1 span.active:after,
+.btn.effect1 span.active:before {
+  top: 0px;
+  left: 0px;
+}
+
+.btn.effect1 span.active:after {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+}
+
+.btn.effect1 span.active:before {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+}
+.theme-light {
+  --color-primary: #0060df;
+  --color-primary: #0060df;
+  --color-secondary: #fbfbfe;
+  --color-accent: #fd6f53;
+  --font-color: #000000;
+}
+.theme-dark {
+  --color-primary: #17ed90;
+  --color-secondary: #2a2c2d;
+  --color-accent: #12cdea;
+  --font-color: #ffffff;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  background-color: rgba(56, 55, 55, 0.823);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 30px;
+  width: 30px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white url("https://i.ibb.co/FxzBYR9/night.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  /* background-color: hsl(207, 90%, 54%); */
+  background-color: white;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px rgb(187, 184, 184);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white url("https://i.ibb.co/7JfqXxB/sunny.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/********** Loader component ***********/
+.loader6 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(52, 51, 51, 0.35);
+}
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  background-color: transparent;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) forwards infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.btnStyle {
+  @apply bg-purple-600 hover:bg-purple-700  text-white  shadow-slate-500 shadow-sm dark:shadow-inner dark:shadow-blue-300   border-slate-200 dark:border-blue-200  active:bg-purple-500 dark:text-gray-100 dark:active:bg-blue-400 dark:bg-blue-600 dark:hover:bg-blue-500 md:font-medium text-[14px] md:text-[16px] lg:text-xl py-1 px-2 md:py-1 md:px-3 rounded-full;
 }
