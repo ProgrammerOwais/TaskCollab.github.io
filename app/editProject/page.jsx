@@ -11,7 +11,7 @@ const EditProjectData = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   // get the project data from ProjectContext
-  const { projects, updateProjects } = useContext(ProjectContext);
+  // const { projects, updateProjects } = useContext(ProjectContext);
   const router = useRouter();
   const { data: session } = useSession();
   const [submitting, setSubmitting] = useState(false);
@@ -153,13 +153,13 @@ const EditProjectData = () => {
       });
       if (res.ok) {
         alert("you data is successfully updated");
-        let updatedData = projects?.map((data) => {
-          if (data._id === id) {
-            return formData;
-          }
-          return data;
-        });
-        updateProjects(updatedData);
+        // let updatedData = projects?.map((data) => {
+        //   if (data._id === id) {
+        //     return formData;
+        //   }
+        //   return data;
+        // });
+        // updateProjects(updatedData);
         setFormData(
           (prevForm) =>
             (prevForm = {

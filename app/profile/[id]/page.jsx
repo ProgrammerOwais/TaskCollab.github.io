@@ -1,10 +1,11 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import ProjectList from "@/components/ProjectList";
 import ProjectContext from "@/components/ProjectContext";
+import Loader from "@/components/Loader";
 
 const Profile = ({ params }) => {
   const headings = [
@@ -21,9 +22,19 @@ const Profile = ({ params }) => {
   ];
 
   // get teh project data from ProjectContext
-  const { projects, updateProjects } = useContext(ProjectContext);
+  // const { projects, updateProjects } = useContext(ProjectContext);
+  const [projects, setProjects] = useState(null);
 
   const { data: session } = useSession();
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await fetch("/api/posts", { cache: "no-store" });
+      const data = await res.json();
+      setProjects(data);
+    };
+
+    fetchProjects();
+  }, [session?.user]);
 
   // if the user is not logged In
   if (!session?.user) {
@@ -37,14 +48,14 @@ const Profile = ({ params }) => {
 
   return (
     <>
-      {
+      {projects ? (
         <section className="flexCenter flex-col w-[95%] lg:max-w-[1200px]   mx-auto paddings my-4">
           {/* if its his own profile  */}
           {session?.user?.id === params.id ? (
             <>
               <section
                 className="flexBetween max-lg:flex-col
-       w-[95%] sm:w-full mx-auto p-2 md:p-0"
+     w-[95%] sm:w-full mx-auto p-2 md:p-0"
               >
                 <div className="flex items-center justify-center md:items-start flex-col gap-4 md:gap-10  text-slate-700 dark:text-gray-200">
                   <Image
@@ -87,7 +98,7 @@ const Profile = ({ params }) => {
                             <ProjectList
                               project={project}
                               projects={projects}
-                              setProjects={updateProjects}
+                              setProjects={setProjects}
                               session={session}
                               join={false}
                             />
@@ -104,7 +115,7 @@ const Profile = ({ params }) => {
                 </h2>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-4">
                   {/* display only those projects which you are joined & 
-                  not the owner of the projects  */}
+                not the owner of the projects  */}
                   {projects
                     ? projects.map((project, index) => {
                         let handleMember = false;
@@ -124,7 +135,7 @@ const Profile = ({ params }) => {
                                 <ProjectList
                                   key={index}
                                   project={project}
-                                  setProjects={updateProjects}
+                                  setProjects={setProjects}
                                   session={session}
                                   join={true}
                                 />
@@ -144,11 +155,11 @@ const Profile = ({ params }) => {
             <>
               <section
                 className="flexBetween max-lg:flex-col
-             w-[95%] sm:w-full mx-auto p-2 md:p-0"
+           w-[95%] sm:w-full mx-auto p-2 md:p-0"
               >
                 <div className="flex items-center justify-center md:items-start flex-col gap-4 md:gap-10  text-slate-700 dark:text-gray-200">
                   {/* // check if the user of this id is exist, 
-                  if it exists then display its detail */}
+                if it exists then display its detail */}
                   {projects?.find(
                     (project) => project.creator._id === params.id
                   ) === undefined ? (
@@ -218,7 +229,7 @@ const Profile = ({ params }) => {
                         <ProjectList
                           key={index}
                           project={userProject}
-                          setProjects={updateProjects}
+                          setProjects={setProjects}
                           session={session}
                           join={false}
                         />
@@ -234,7 +245,7 @@ const Profile = ({ params }) => {
                 </h2>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-4">
                   {/* display those projects which are joined by user but not his
-                  own */}
+                own */}
                   {projects
                     ? projects.map((project, index) => {
                         let handleMember = false;
@@ -265,7 +276,7 @@ const Profile = ({ params }) => {
                                 <ProjectList
                                   key={index}
                                   project={project}
-                                  setProjects={updateProjects}
+                                  setProjects={setProjects}
                                   session={session}
                                   join={true}
                                 />
@@ -282,7 +293,9 @@ const Profile = ({ params }) => {
             </>
           )}
         </section>
-      }
+      ) : (
+        <Loader />
+      )}
     </>
   );
 };

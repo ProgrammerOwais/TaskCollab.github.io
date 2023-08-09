@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Loader from "@/components/Loader";
 const ProjectDetails = () => {
   // get the projec data from ProjectContext
-  const { projects, updateProjects } = useContext(ProjectContext);
+  // const { projects, updateProjects } = useContext(ProjectContext);
   const searchParams = useSearchParams();
   // get the id from url
   const id = searchParams.get("id");
@@ -104,13 +104,13 @@ const ProjectDetails = () => {
       });
       setProject((preProject) => ({ ...preProject, users: updatedUsers }));
       // also make these changes happen in temporary stored projects data
-      let updatedData = projects?.map((data) => {
-        if (data._id === id) {
-          return { ...data, users: updatedUsers };
-        }
-        return data;
-      });
-      updateProjects(updatedData);
+      // let updatedData = projects?.map((data) => {
+      //   if (data._id === id) {
+      //     return { ...data, users: updatedUsers };
+      //   }
+      //   return data;
+      // });
+      // updateProjects(updatedData);
       setIsMember(() => true);
     } catch (error) {
       console.log("the error while joining the user : ", error);
@@ -208,7 +208,7 @@ const ProjectDetails = () => {
   };
   useEffect(() => {
     const fetchPostData = async () => {
-      const res = await fetch(`/api/posts/${id}/post`);
+      const res = await fetch(`/api/posts/${id}/post`, { cache: "no-store" });
       const data = await res.json();
       setProject(data);
     };

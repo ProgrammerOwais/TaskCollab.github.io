@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ProjectContext from "@/components/ProjectContext";
 import { useSession } from "next-auth/react";
 import ProjectList from "@/components/ProjectList";
@@ -8,7 +8,17 @@ import Loader from "@/components/Loader";
 const Collab = () => {
   const { data: session } = useSession();
   // get the projects data from ProjectContext
-  const { projects, updateProjects } = useContext(ProjectContext);
+  // const { projects, updateProjects } = useContext(ProjectContext);
+  const [projects, setProjects] = useState(null);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await fetch("/api/posts", { cache: "no-store" });
+      const data = await res.json();
+      setProjects(data);
+    };
+
+    fetchProjects();
+  }, []);
 
   let projectExists = false;
 
@@ -54,7 +64,7 @@ const Collab = () => {
                       key={index}
                       project={project}
                       projects={projects}
-                      setProjects={updateProjects}
+                      setProjects={setProjects}
                       session={session}
                     />
                   ) : (

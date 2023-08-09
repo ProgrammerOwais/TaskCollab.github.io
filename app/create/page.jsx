@@ -5,7 +5,7 @@ import { useState, useContext } from "react";
 import ProjectContext from "@/components/ProjectContext";
 
 const Create = () => {
-  const { updateProjects } = useContext(ProjectContext);
+  // const { updateProjects } = useContext(ProjectContext);
   const router = useRouter();
   const { data: session } = useSession();
   const [submitting, setSubmitting] = useState(false);
@@ -190,13 +190,14 @@ const Create = () => {
     } finally {
       setSubmitting(false);
       // update the projects data
-      const fetchProjects = async () => {
-        const res = await fetch("/api/posts");
-        const data = await res.json();
-        updateProjects(data);
-        router.push("/");
-      };
-      fetchProjects();
+      // const fetchProjects = async () => {
+      //   const res = await fetch("/api/posts");
+      //   const data = await res.json();
+      //   updateProjects(data);
+      //   router.push("/");
+      // };
+      // fetchProjects();
+      router.push("/");
     }
   };
   if (!session?.user) {

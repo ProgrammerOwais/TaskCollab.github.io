@@ -1,16 +1,27 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ProjectContext from "@/components/ProjectContext";
 import { useSession } from "next-auth/react";
 import ProjectList from "@/components/ProjectList";
+import Loader from "@/components/Loader";
 
 const Join = () => {
   const { data: session } = useSession();
+  const [projects, setProjects] = useState(null);
 
   // get the projects data from ProjectContext
-  const { projects, updateProjects } = useContext(ProjectContext);
+  // const { projects, updateProjects } = useContext(ProjectContext);
   // if user is not logged In
   let projectExists = false;
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await fetch("/api/posts", { cache: "no-store" });
+      const data = await res.json();
+      setProjects(data);
+    };
+
+    fetchProjects();
+  }, []);
 
   if (!session?.user) {
     return (
@@ -35,48 +46,50 @@ const Join = () => {
       <hr className="border-slate-500 my-3 md:my-5" />
       <div className="flex flex-wrap justify-center sm:justify-start gap-4">
         {/*  display only those projects which you are joined or yours */}
-        {projects
-          ? projects.map((project, index) => {
-              let handleMember = false;
-              // if these are your own projects
-              if (project.creator.email === session?.user?.email) {
+        {projects ? (
+          projects.map((project, index) => {
+            let handleMember = false;
+            // if these are your own projects
+            if (project.creator.email === session?.user?.email) {
+              projectExists = true;
+              return (
+                <>
+                  <ProjectList
+                    key={index}
+                    project={project}
+                    projects={projects}
+                    setProjects={setProjects}
+                    session={session}
+                  />
+                </>
+              );
+            } else {
+              {
+                project.users.map((user) => {
+                  if (user.email === session?.user?.email) {
+                    handleMember = true;
+                  }
+                });
+              }
+              //  if you are the users/members  of other projects
+              if (handleMember) {
                 projectExists = true;
                 return (
-                  <>
-                    <ProjectList
-                      key={index}
-                      project={project}
-                      projects={projects}
-                      setProjects={updateProjects}
-                      session={session}
-                    />
-                  </>
+                  <ProjectList
+                    key={index}
+                    project={project}
+                    projects={projects}
+                    setProjects={setProjects}
+                    session={session}
+                    join={true}
+                  />
                 );
-              } else {
-                {
-                  project.users.map((user) => {
-                    if (user.email === session?.user?.email) {
-                      handleMember = true;
-                    }
-                  });
-                }
-                //  if you are the users/members  of other projects
-                if (handleMember) {
-                  projectExists = true;
-                  return (
-                    <ProjectList
-                      key={index}
-                      project={project}
-                      projects={projects}
-                      setProjects={updateProjects}
-                      session={session}
-                      join={true}
-                    />
-                  );
-                }
               }
-            })
-          : ""}
+            }
+          })
+        ) : (
+          <Loader />
+        )}
         {!projectExists && (
           <p className="text-slate-600 md:w-9/12 dark:text-slate-300 text-[16px] sm:text-xl">
             Yet You didn't join any Project 🥱
