@@ -1,5 +1,4 @@
 import Link from "next/link";
-import AlertBox from "@/components/AlertBox";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -8,7 +7,6 @@ export default function Home() {
   return (
     <main className="mt-10 min-h-[400px] w-[95%] md:w-8/12 mx-auto md:mt-24 flex flex-col gap-5 md:gap-10">
       <h1 className="text-center text-2xl md:text-3xl lg:text-4xl text-slate-700 dark:text-gray-200 font-bold ">
-        <AlertBox msg="Welcome to TaskCollab!" />
         TaskCollab - Empower Your Team, Supercharge Productivity!
       </h1>
       <p className="text-center text-slate-600 dark:text-slate-500 text-[16px] sm:text-xl ">
