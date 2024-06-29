@@ -3,7 +3,10 @@ import { useEffect, useState, useContext } from "react";
 import ProjectContext from "@/components/ProjectContext";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import AlertBox from "@/components/AlertBox";
+
 import Loader from "@/components/Loader";
+import { set } from "mongoose";
 const ProjectDetails = () => {
   // get the projec data from ProjectContext
   // const { projects, updateProjects } = useContext(ProjectContext);
@@ -21,10 +24,11 @@ const ProjectDetails = () => {
   // const [chatHistory, setChatHistory] = useState([]);
   const [state, setState] = useState(false);
   const [edit, setEdit] = useState({ state: false, index: null });
+  const [isAlertBox, setIsAlertBox] = useState(false);
   // send the message to the backend & display in message box
   const handleSendMsg = async () => {
     if (message.length === 0) {
-      return alert("plz enter some data");
+      return;
     }
     let currentTime = new Date();
     const updatedChat = [...project.chatData];
@@ -64,7 +68,10 @@ const ProjectDetails = () => {
         console.log("the error while deleting the chat : ", error);
       }
     } else {
-      alert("sorry you can't delete it");
+      setIsAlertBox(true);
+      setTimeout(() => {
+        setIsAlertBox(false);
+      }, 3000);
     }
   };
   const handleEditMsg = async (index) => {
@@ -266,6 +273,12 @@ const ProjectDetails = () => {
     <>
       {project?.projectName ? (
         <>
+          {isAlertBox && (
+            <AlertBox
+              msg="You can't delete the message of others"
+              type="error"
+            />
+          )}
           <div className="p-3 md:p-6 w-11/12 md:w-10/12 mx-auto bg-white rounded-lg shadow-md flex flex-col dark:bg-slate-800 dark:border-2 text-slate-600 dark:text-slate-500  dark:border-slate-700 dark:shadow-inner dark:shadow-slate-700  mt-5">
             <div className="flex flex-col gap-10 justify-start md:flex-row md:justify-center  md:md:gap-2">
               <div className="flex flex-col gap-2 mx-auto w-11/12 md:m-0 md:w-5/12">

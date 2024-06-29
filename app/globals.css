@@ -233,3 +233,46 @@ input:checked + .slider:before {
 .btnStyle {
   @apply bg-purple-600 hover:bg-purple-700  text-white  shadow-slate-500 shadow-sm dark:shadow-inner dark:shadow-blue-300   border-slate-200 dark:border-blue-200  active:bg-purple-500 dark:text-gray-100 dark:active:bg-blue-400 dark:bg-blue-600 dark:hover:bg-blue-500 md:font-medium text-[14px] md:text-[16px] lg:text-xl py-1 px-2 md:py-1 md:px-3 rounded-full;
 }
+
+/********************* Alert Box **********************/
+.alertBox {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background-color: white;
+  width: 300px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.5s forwards, fadeOut 0.5s 3s forwards;
+}
+.alertBox h5 {
+  font-size: 1rem;
+  color: black;
+}
+
+@keyframes slideIn {
+  0% {
+    top: -200px;
+  }
+  100% {
+    top: 20px;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    top: -200px;
+  }
+}

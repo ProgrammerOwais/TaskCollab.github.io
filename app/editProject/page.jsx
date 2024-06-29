@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
 import ProjectContext from "@/components/ProjectContext";
 import Loader from "@/components/Loader";
+import AlertBox from "@/components/AlertBox";
 
 import { useSearchParams } from "next/navigation";
 
@@ -15,6 +16,9 @@ const EditProjectData = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [submitting, setSubmitting] = useState(false);
+  // for handling the successful submission
+  const [submitted, setSubmitted] = useState(false);
+  const [isShowAlert, setIsShowAlert] = useState(false);
 
   const [invitedUsers, setinvitedUsers] = useState("");
   // set the form data properties
@@ -124,17 +128,24 @@ const EditProjectData = () => {
         !formData.projectDescription ||
         !formData.teamMembers
       ) {
-        alert("Make sure to fill all the * fields ");
+        setIsShowAlert(() => true);
+        setTimeout(() => {
+          setIsShowAlert(false);
+        }, 3000);
         return;
       }
-      let isTaksDataEmpty = false;
+      let isTaskEmpty = false;
       formData.task.map((data) => {
         if (!data.name || !data.description) {
-          isTaksDataEmpty = true;
+          isTaskEmpty = true;
         }
       });
-      if (isTaksDataEmpty) {
-        alert("Make sure to fill all the * fields ");
+      if (isTaskEmpty) {
+        setIsShowAlert(true);
+
+        setTimeout(() => {
+          setIsShowAlert(false);
+        }, 3000);
         return;
       }
       setSubmitting(true);
@@ -152,7 +163,6 @@ const EditProjectData = () => {
         }),
       });
       if (res.ok) {
-        alert("you data is successfully updated");
         // let updatedData = projects?.map((data) => {
         //   if (data._id === id) {
         //     return formData;
@@ -182,7 +192,11 @@ const EditProjectData = () => {
               invitedUsers: [],
             })
         );
-        router.push("/");
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          router.push("/");
+        }, 1500);
       }
     } catch (error) {
       console.error("Error while submitting the data:", error);
@@ -206,6 +220,16 @@ const EditProjectData = () => {
           onSubmit={handleSubmit}
           className="max-w-[90%] md:max-w-md mx-auto mt-12 bg-white rounded-lg p-3 md:p-6 shadow-md text-slate-600 dark:text-blue-300 dark:bg-slate-800 dark:border-2 dark:border-slate-700 dark:shadow-inner dark:shadow-slate-700"
         >
+          {isShowAlert ? (
+            <AlertBox msg="Make sure to fill all the * fields" />
+          ) : (
+            ""
+          )}
+          {!isShowAlert && submitted ? (
+            <AlertBox msg="Your Data is Successfully Submitted" />
+          ) : (
+            ""
+          )}
           <div>
             <label htmlFor="projectName" className="block pb-1 mt-2">
               Project Name <span className="text-red-500">*</span> :
